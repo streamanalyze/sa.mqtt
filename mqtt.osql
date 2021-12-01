@@ -1,0 +1,4 @@
+load_lisp("mqtt.lsp");
+create function mqtt:register_client(Charstring name, Record opts) 
+                                     -> Charstring
+  as foreign "register-mqtt-client--+";

@@ -1,0 +1,34 @@
+load_osql("mqtt.osql");
+set :mqtt_connect_opts = {
+  "qos": 0,
+  "connection": "tcp://localhost:1883",
+  "clientid": "producer2-qos0"
+};
+
+set :mqtt_connect_opts1 = {
+  "qos": 1,
+  "connection": "tcp://localhost:1883",
+  "clientid": "producer2-qos1"
+};
+
+set :mqtt_connect_opts2 = {
+  "qos": 2,
+  "connection": "tcp://localhost:1883",
+  "clientid": "producer2-qos2"
+};
+
+mqtt:register_client("mqtt",:mqtt_connect_opts);
+mqtt:register_client("mqtt1",:mqtt_connect_opts1);
+mqtt:register_client("mqtt2",:mqtt_connect_opts2);
+
+
+select pivot_streams([s1,s2,s3,s4])
+  from Stream s1, Stream s2, Stream s3 , Stream s4
+ where s1 = publish(mod(diota(0.01,1,10000),3),"mqtt:/stream1")
+   and s2 = publish((select stream of [i,i+1]
+                       from Number i
+                      where i in mod(diota(0.01,1,10000),3)), "mqtt1:/stream2")
+   and s3 = publish(binary(mod(diota(0.01,1,10000),3)), "mqtt2:/stream3")
+   and s4 = publish(binary(mod(diota(0.001,1,1000000000),3)), "mqtt:/stream4");
+
+

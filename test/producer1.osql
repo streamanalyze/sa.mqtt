@@ -1,0 +1,47 @@
+load_osql("mqtt.osql");
+set :mqtt_connect_opts = {
+  "qos": 0,
+  "connection": "tcp://localhost:1883",
+  "clientid": "producer1-qos0"
+};
+
+set :mqtt_connect_opts1 = {
+  "qos": 1,
+  "connection": "tcp://localhost:1883",
+  "clientid": "producer1-qos1"
+};
+
+set :mqtt_connect_opts2 = {
+  "qos": 2,
+  "connection": "tcp://localhost:1883",
+  "clientid": "producer1-qos2"
+};
+
+mqtt:register_client("mqtt",:mqtt_connect_opts);
+mqtt:register_client("mqtt1",:mqtt_connect_opts1);
+mqtt:register_client("mqtt2",:mqtt_connect_opts2);
+
+create function wait(charstring topic) -> Stream
+  as {
+    sink(select stream of subscribe(topic) limit 1);
+    return 1;
+  };
+create function timeout(Number s) -> Stream
+  as select stream of sleep(s);
+
+wait("mqtt:/g1");
+sink(first_n(merge_streams(bag(
+  wait("mqtt:/g2"),
+  streamof(sink(publish(siota(1,100000000000),"mqtt:/max1")))
+)),1));
+
+sink(first_n(merge_streams(bag(
+  wait("mqtt:/g4"),
+  streamof(sink(publish(siota(1,100000000000),"mqtt1:/max2")))
+)),1));
+
+sink(first_n(merge_streams(bag(
+  wait("mqtt:/g6"),
+  streamof(sink(publish(siota(1,100000000000),"mqtt2:/max3")))
+)),1));
+
