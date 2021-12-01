@@ -12,7 +12,17 @@ If you wish to do this another way modify the Makefile and make sure that one of
 
 is linked/included in the build.
 
-You must have installed sa.engine on your machine according to [these](TBD) instructions to build this extender.
+
+To build this extender you need to:
+
+1. Sign up at [studio.streamanalyze.com](https://studio.streamanalyze.com/) and download sa.engine core
+for the target platform. 
+2. Unpack the sa.engine packag eto a desired location, e.g. `~/development/sa.engine`.
+3. set `SA_ENGINE_HOME` to point to the sa.engine folder, e.g: `export SA_ENGINE_HOME=~/development/sa.engine`.
+4. run `make test`
+
+Cross compiling should work as long as you have libpaho-mqttaX.x and sa.engine installed on the target platform. Modify the Makefile
+to add crosscompiling options if needed.
 
 To build the extender run:
 
