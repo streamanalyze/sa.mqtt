@@ -1,0 +1,28 @@
+cmake_minimum_required(VERSION 2.8.12)
+
+project(sa.mqtt)
+
+set(SA_MQTT sa.mqtt)
+set(SA_ENGINE_HOME CACHE STRING "How to link the sa.kernel library.")
+
+if("${SA_ENGINE_HOME}" STREQUAL "")
+  message(FATAL_ERROR "SA_ENGINE_HOME not set.")
+endif()
+
+if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
+  add_definitions(-fPIC)
+  add_definitions(-O2 -Werror -DUNIX=1 -DLINUX=1  -DNO_HEAP_TRACKING=1
+    -DHIGH_PERFORMANCE=1)
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
+  add_definitions(-DUNIX=1 -DLINUX=1 -DOSX=1 -O2)
+elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
+  add_definitions(-DOS_Windows=1)
+  include(cmake/windows.cmake)
+endif()
+
+set(INCLUDE_DIRS
+  ${SA_ENGINE_HOME}/C
+  ${CMAKE_SOURCE_DIR}/include
+  )
+
+add_subdirectory("src")
