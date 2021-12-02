@@ -97,7 +97,6 @@ int messageArrived(void *context, char *topicName, int topicLen, MQTTAsync_messa
 
 static int onSSLError(const char *str, size_t len, void *context)
 {
-    MQTTAsync client = (MQTTAsync)context;
     return fprintf(stderr, "SSL error: %s\n", str);
 }
 
@@ -159,8 +158,6 @@ int sa_mqtt_connect(MQTTAsync *client, struct pubsub_opts *opts)
 
     if (opts->MQTTVersion == MQTTVERSION_5)
     {
-        MQTTProperties props = MQTTProperties_initializer;
-        MQTTProperty property;
         MQTTAsync_connectOptions conn_opts5 = MQTTAsync_connectOptions_initializer5;
         conn_opts = conn_opts5;
         conn_opts.onSuccess5 = onPublish5;
@@ -227,7 +224,6 @@ void client_thread(size_t arg)
     sa_connection c;
     sa_connect(&c,"");
     sa_mqtt_instance *context = (sa_mqtt_instance *)arg;
-    ohandle arr = nil;
     while(TRUE)
     {
         void *temp_buff[CLIENT_POP_BUFFER_SIZE];
@@ -409,15 +405,9 @@ ohandle mqtt_register_clientfn(bindtype env,ohandle name, ohandle opts_record)
     //signal(SIGINT,SIG_IGN);
 
     sa_mqtt_instance *context;
-    MQTTAsync_responseOptions conn_opts = MQTTAsync_responseOptions_initializer;
-    MQTTProperty property;
-    MQTTProperties props = MQTTProperties_initializer;
     MQTTAsync_createOptions createOpts = MQTTAsync_createOptions_initializer;
     MQTTAsync *client = (MQTTAsync *)malloc(sizeof(*client));
-    char *dadder, *dclient_id, *dtopic;
-    double dto;
-    int dqos, rc;
-    ohandle ret;
+    int rc;
 
     context = (sa_mqtt_instance *)malloc(sizeof(*context));
     context->subscriber_buff = sa_make_circular_buffer(SA_MQTT_CIRC_BUFF_SIZE,sizeof(sa_mqtt_buff_item));

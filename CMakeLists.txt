@@ -11,7 +11,7 @@ endif()
 
 if("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
   add_definitions(-fPIC)
-  add_definitions(-O2 -Werror -DUNIX=1 -DLINUX=1  -DNO_HEAP_TRACKING=1
+  add_definitions(-O2 -Wall -Werror -DUNIX=1 -DLINUX=1  -DNO_HEAP_TRACKING=1
     -DHIGH_PERFORMANCE=1)
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
   add_definitions(-DUNIX=1 -DLINUX=1 -DOSX=1 -O2)
