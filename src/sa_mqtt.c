@@ -261,7 +261,7 @@ void onSendFailure(void *context, MQTTAsync_failureData *response) {
 int free_mqtt_client(void *mem, size_t size) {
   sa_mqtt_instance *context = (sa_mqtt_instance *)mem;
   MQTTAsync *client = context->client;
-  sa_destroy_circular_buffer(context->subscriber_buff);
+  sa_circular_buffer_destroy(context->subscriber_buff);
   MQTTAsync_destroy(client);
   free(context);
   return 0;
@@ -375,7 +375,7 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
   int rc;
 
   context = (sa_mqtt_instance *)malloc(sizeof(*context));
-  context->subscriber_buff = sa_make_circular_buffer(SA_MQTT_CIRC_BUFF_SIZE,
+  context->subscriber_buff = sa_circular_buffer_make(SA_MQTT_CIRC_BUFF_SIZE,
                                                      sizeof(sa_mqtt_buff_item));
   context->client = client;
   a_let(context->subscription_emit_sym, mksymbol("subscription-emit"));

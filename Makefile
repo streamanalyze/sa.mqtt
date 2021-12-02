@@ -33,8 +33,8 @@ clean:
 	rm -f *.so
 
 test: all
-	pkill -9 mosquitto ; pkill -9 sa.engine
-	cp mqtt.so $(SA_ENGINE_HOME)/bin/
+	-pkill -9 mosquitto ; pkill -9 sa.engine
+	cp sa_mqtt.so $(SA_ENGINE_HOME)/bin/
 	mosquitto -d > /dev/null
 	sa.engine -O test/test.osql
 	pkill -9 mosquitto
