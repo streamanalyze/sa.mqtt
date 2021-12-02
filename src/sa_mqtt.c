@@ -249,7 +249,7 @@ void client_thread(size_t arg)
                 ohandle mem = nil;
                 ohandle topic = nil;
                 sa_mqtt_buff_item *item = temp_buff[i];
-                char full_topic[200];
+                char full_topic[201];
                 memset(full_topic,0,200);
                 strncat(full_topic,context->name,200);
                 strncat(full_topic,":",200);
