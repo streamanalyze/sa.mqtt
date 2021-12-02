@@ -1,12 +1,11 @@
 #ifndef _SA_CIRCULAR_BUFF_H_
 #define _SA_CIRCULAR_BUFF_H_
 #include <inttypes.h>
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-typedef struct sa_circular_buffer_s
-{
+#include <unistd.h>
+typedef struct sa_circular_buffer_s {
   uint8_t running;
   uint8_t stopped;
   int reader_pos;
@@ -16,7 +15,8 @@ typedef struct sa_circular_buffer_s
   void **buffer;
 } sa_circular_buffer;
 
-extern sa_circular_buffer *sa_make_circular_buffer(size_t size, size_t item_size);
+extern sa_circular_buffer *sa_make_circular_buffer(size_t size,
+                                                   size_t item_size);
 extern void sa_destroy_circular_buffer(sa_circular_buffer *buff);
 extern int sa_circular_buffer_can_read(sa_circular_buffer *buff);
 extern int sa_circular_buffer_can_write(sa_circular_buffer *buff);
