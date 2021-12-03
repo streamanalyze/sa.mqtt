@@ -1,4 +1,4 @@
-(load-extension "sa_mqtt" t)
+(load-extension "sa.mqtt" t)
 
 
 (defun register-mqtt-client--+ (fno name opts r)

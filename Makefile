@@ -7,7 +7,7 @@
 # The environmant variable WORDLEN must be set to 64 or 32
 #####################################################################
 
-EXTENSION = sa_mqtt
+EXTENSION = libsa.mqtt
 srcdir = src
 SOURCE_FILES = $(wildcard $(srcdir)/*.c)
 
@@ -34,7 +34,7 @@ clean:
 
 test: all
 	-pkill -9 mosquitto ; pkill -9 sa.engine
-	cp sa_mqtt.so $(SA_ENGINE_HOME)/bin/
+	cp $(EXTENSION).so $(SA_ENGINE_HOME)/bin/
 	mosquitto -d > /dev/null
 	sa.engine -O test/test.osql
 	pkill -9 mosquitto
