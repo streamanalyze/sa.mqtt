@@ -17,11 +17,8 @@ elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
   add_definitions(-DUNIX=1 -DLINUX=1 -DOSX=1 -O2)
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
   add_definitions(-DOS_Windows=1)
+  set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH}
+    "C:/Program Files (x86)/Eclipse Paho C")
 endif()
-
-set(INCLUDE_DIRS
-  ${SA_ENGINE_HOME}/C
-  ${CMAKE_SOURCE_DIR}/include
-  )
 
 add_subdirectory("src")
