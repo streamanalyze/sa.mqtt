@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 2.8.12)
 
 project(sa.mqtt)
 
-set(SA_MQTT sa.mqtt)
+set(SA_MQTT sa_mqtt)
 set(SA_ENGINE_HOME CACHE STRING "How to link the sa.kernel library.")
 
 if("${SA_ENGINE_HOME}" STREQUAL "")

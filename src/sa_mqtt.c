@@ -400,7 +400,6 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
 }
 
 EXPORT void a_initialize_extension(void *xa) {
-  printf("INITIALIZING MQTT\n");
   extfunction3("mqtt-publish", mqtt_publishfn);
   extfunction2("mqtt-subscribe", mqtt_subscribefn);
   extfunction2("mqtt-unsubscribe", mqtt_unsubscribefn);

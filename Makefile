@@ -7,7 +7,7 @@
 # The environmant variable WORDLEN must be set to 64 or 32
 #####################################################################
 
-EXTENSION = libsa.mqtt
+EXTENSION = libsa_mqtt
 srcdir = src
 SOURCE_FILES = $(wildcard $(srcdir)/*.c)
 
