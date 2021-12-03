@@ -17,7 +17,6 @@ elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Darwin")
   add_definitions(-DUNIX=1 -DLINUX=1 -DOSX=1 -O2)
 elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
   add_definitions(-DOS_Windows=1)
-  include(cmake/windows.cmake)
 endif()
 
 set(INCLUDE_DIRS
