@@ -1,6 +1,5 @@
 set(SOURCES
   cbfns.c
-  sa_circular_buff.c
   sa_mqtt.c
   )
 
