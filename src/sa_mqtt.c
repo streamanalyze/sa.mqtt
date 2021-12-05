@@ -331,19 +331,16 @@ ohandle make_mqtt_binary(void *p, void *data) {
 
 size_t get_topic_name(void *p, void *data, char *const topic_name,
                       size_t topic_name_len) {
-  sa_datapump *pump = (sa_datapump *)p;
-  sa_mqtt_instance *context = (sa_mqtt_instance *)pump->context;
   sa_mqtt_buff_item *item = (sa_mqtt_buff_item *)data;
 
-  strncat(topic_name, context->name, topic_name_len);
-  strncat(topic_name, ":", topic_name_len);
-  strncat(topic_name, item->topicName, topic_name_len);
+  strncpy(topic_name, item->topicName, topic_name_len);
   MQTTAsync_free(item->topicName);
   return strlen(topic_name);
 }
 #define SA_MQTT_CIRC_BUFF_SIZE 1000
 ohandle mqtt_register_clientfn(bindtype env, ohandle name,
                                ohandle opts_record) {
+  char *dname;
   sa_mqtt_instance *context;
   MQTTAsync_createOptions createOpts = MQTTAsync_createOptions_initializer;
   MQTTAsync *client = (MQTTAsync *)malloc(sizeof(*client));
@@ -351,14 +348,14 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
 
   context = (sa_mqtt_instance *)malloc(sizeof(*context));
   context->client = client;
+    IntoString(name, dname, env);
+
   if (stringlen(name) > 20) {
     return a_printerror(env, -1, "Broker id cannot be more than 20 chars.",
                         opts_record);
   } else {
-    char *temp;
-    IntoString(name, temp, env);
     memset(context->name, 0, 20);
-    memcpy(context->name, temp, strlen(temp));
+    memcpy(context->name, dname, strlen(dname));
   }
 
   struct pubsub_opts opts = Pubsub_opts_initializer;
@@ -393,7 +390,7 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
     return a_printerror(env, -1, MQTTAsync_strerror(rc), opts_record);
   }
   sa_datapump *pump = sa_start_datapump(make_mqtt_binary, get_topic_name, NULL,
-                                        NULL, SA_MQTT_CIRC_BUFF_SIZE,
+                                        dname,NULL, SA_MQTT_CIRC_BUFF_SIZE,
                                         sizeof(sa_mqtt_buff_item), context);
   context->pump = pump;
   return map_memory(context, sizeof(context), (size_t)0, free_mqtt_client);
