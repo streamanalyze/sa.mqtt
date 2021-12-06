@@ -1,4 +1,39 @@
 load_lisp("mqtt.lsp");
 create function mqtt:register_client(Charstring name, Record opts) 
                                      -> Charstring
+/* Register a new MQTT client named `name` with `opts`.
+The options record can container:
+    * `qos` - 0,1, or 2 the quality of service for this client. Default is 0.
+    * `connection`     - connection string `protocol:host:port` , overrides 
+                         host/port e.g tls://hostname:port.  Use this option
+	                     rather than host/port to connect with TLS and/or web 
+                         sockets. No default.
+    * `keepalive`      - MQTT keepalive timeout value. Default is %d seconds.
+    * `will-topic`     - will topic on connect.  No default.
+    * `will-payload`   - will message.  If the will topic is set, but not 
+                         payload, a null message will be set.
+    * `will-retain`    - set the retained flag on the will message.  
+                          The default is off.
+    * `will-qos`       - the will message QoS.  The default is 0.
+    * `username`       - MQTT username. No default.
+    * `password`       - MQTT password. No default.
+    * `cafile`         - a filename for the TLS truststore.
+    * `capath`         - a directory name containing TLS trusted server 
+                         certificates.
+    * `cert`           - a filename for the TLS keystore containing client 
+                         certificates.
+    * `key`            - client private key file.
+    * `keypass`        - password for the client private key file.
+    * `ciphers`        - the list of cipher suites that the client will present
+                         to the server during the TLS handshake.
+    * `insecure`       - don't check that the server certificate common name 
+                         matches the hostname.
+    * `psk`            - pre-shared-key in hexadecimal (no leading 0x)
+    * `psk-identity`   - client identity string for TLS-PSK mode.
+    * `version`        - MQTT version 3=31, 4=311, or 5=5).  Default is 4.
+    * `maxdatalen`     - maximum length of data to read when publishing strings
+                         (default is unset)
+    * `message-expiry` - MQTT 5 only.  Sets the message expiry property in 
+                         seconds.
+*/
   as foreign "register-mqtt-client--+";

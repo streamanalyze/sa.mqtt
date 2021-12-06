@@ -32,7 +32,7 @@ Cross compiling should work as long as you have libpaho-mqttaX.x and sa.engine
 installed on the target platform. Modify the Makefile to add crosscompiling
 options if needed.
 
-To build the extender run:
+To build the extender using make run:
 
 ```
 make all
@@ -79,4 +79,12 @@ Loading "test/setup_test.lsp"
         QoS2 1389.32884302251 (max ~1000)
  OK]
 pkill -9 mosquitto
+```
+
+
+## Building using CMAKE
+```
+mkdir build
+cd build
+cmake .. -DSA_ENGINE_HOME=</PATH/TO/YOUR/SA.ENGINE/FOLDER>
 ```

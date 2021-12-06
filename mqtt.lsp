@@ -2,6 +2,8 @@
 
 
 (defun register-mqtt-client--+ (fno name opts r)
+"Function that registers a new external MQTT pubsub 
+with NAME and OPTS"
   (register-ext-pubsub name opts 
      'mqtt-register-client nil 
      'mqtt-subscribe 'mqtt-unsubscribe 
