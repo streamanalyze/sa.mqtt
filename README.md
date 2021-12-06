@@ -92,7 +92,7 @@ cmake .. -DSA_ENGINE_HOME=</PATH/TO/YOUR/SA.ENGINE/FOLDER>
 
 
 ## Build using docker
-Download sa_engine_core_linux_x64.tar.gz and put in sa.mqtt directory.
+Download sa_engine_core_linux_x64.tar.gz and put in the sa.mqtt directory.
 Build the container:
 ```
 docker build . -t sa.mqtt.builder:1
@@ -107,3 +107,9 @@ docker run -ti --mount type=bind,source="$(pwd)",target=/sa.mqtt  sa.mqtt.builde
 root@f0f49b504f21:/# cd sa.mqtt/
 root@f0f49b504f21:/sa.mqtt# make test
 ```
+
+
+## Testing
+As of now this repo is tested in our internal CI/CD pipeline every night against main. 
+We are working on a good way to supply a public CI/CD pipeline to view results from.
+Feel free to use the dockerimage for your own testing.
