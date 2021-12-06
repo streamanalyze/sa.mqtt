@@ -321,12 +321,10 @@ ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
   return t;
 }
 
-ohandle make_mqtt_binary(void *p, void *data) {
-  ohandle mem = nil;
+void make_mqtt_binary(ohandle *ret, void *p,void *data) {
   sa_mqtt_buff_item *item = (sa_mqtt_buff_item *)data;
-  sa_makebinary(&mem, item->message->payload, item->message->payloadlen);
+  sa_makebinary(ret, item->message->payload, item->message->payloadlen);
   MQTTAsync_freeMessage(&(item->message));
-  a_return(mem);
 }
 
 size_t get_topic_name(void *p, void *data, char *const topic_name,
