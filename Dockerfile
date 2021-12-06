@@ -30,8 +30,10 @@ RUN apt-get -qy install socat
 RUN apt-get -qy install libssl-dev
 
 # Recent versions of Linux tend to use systemd (which uses systemctl command), while the older versions of Linux tend to use System V init (which uses the service command) If your system uses systemd, the command is:- 'sudo systemctl start mongod' and if it uses System V Init then the command is:- 'sudo service mongod start'
-
+RUN git clone --depth 1 --branch v1.3.9 https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c && make && sudo make install
+ADD sa_engine_core_linux_x64.tar.gz /
+ENV SA_ENGINE_HOME /sa.engine
+ENV PATH $PATH:/sa.engine/bin
 RUN service ssh start
 
-EXPOSE 22
-CMD ["/usr/sbin/sshd","-D"]
+# ADD . /sa.mqtt

@@ -3,7 +3,6 @@
 #include <signal.h>
 
 #include "sa_datapump.h"
-#include "sa_debug.h"
 #include "sa_handle.h"
 #include "sa_threads.h"
 #include <dlfcn.h>

@@ -89,3 +89,21 @@ mkdir build
 cd build
 cmake .. -DSA_ENGINE_HOME=</PATH/TO/YOUR/SA.ENGINE/FOLDER>
 ```
+
+
+## Build using docker
+Download sa_engine_core_linux_x64.tar.gz and put in sa.mqtt directory.
+Build the container:
+```
+docker build . -t sa.mqtt.builder:1
+```
+Run it and build:
+```
+Windows:
+docker run -ti --mount type=bind,source="%cd%",target=/sa.mqtt  sa.mqtt.builder:1 /bin/bash
+Linux:
+docker run -ti --mount type=bind,source="$(pwd)",target=/sa.mqtt  sa.mqtt.builder:1 /bin/bash
+
+root@f0f49b504f21:/# cd sa.mqtt/
+root@f0f49b504f21:/sa.mqtt# make test
+```
