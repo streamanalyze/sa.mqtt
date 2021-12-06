@@ -21,7 +21,6 @@ set :mqtt_connect_opts2 = {
 };
 
 
-
 mqtt:register_client("mqtt",:mqtt_connect_opts);
 
 mqtt:register_client("mqtt1",:mqtt_connect_opts1);
@@ -29,7 +28,6 @@ mqtt:register_client("mqtt1",:mqtt_connect_opts1);
 mqtt:register_client("mqtt2",:mqtt_connect_opts2);
 
 load_lisp("test/setup_test.lsp");
-
 /* Example of a simple subscription on MQTT.
 mqtt is the external prefix and /stream3 is
 the topic on the broker mqtt is connected to.*/
@@ -92,5 +90,7 @@ validate "MQTT Fast"
                                       limit 1000))))+" (max ~1000)") => true
   check sink(publish(siota(1,10),"mqtt:/g6")) => true;
 
+validate "MQTT create item not leaking objects"
+  check aton(_lisp("(allocated-objects 'binary)")) < 30 => true;
 
 quit;

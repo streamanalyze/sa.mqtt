@@ -326,7 +326,7 @@ ohandle make_mqtt_binary(void *p, void *data) {
   sa_mqtt_buff_item *item = (sa_mqtt_buff_item *)data;
   sa_makebinary(&mem, item->message->payload, item->message->payloadlen);
   MQTTAsync_freeMessage(&(item->message));
-  return mem;
+  a_return(mem);
 }
 
 size_t get_topic_name(void *p, void *data, char *const topic_name,
