@@ -83,6 +83,7 @@ pkill -9 mosquitto
 
 
 ## Building using CMAKE
+To build this project using CMAKE simply run:
 ```
 mkdir build
 cd build
