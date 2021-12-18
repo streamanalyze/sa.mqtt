@@ -132,7 +132,7 @@ exit:
   return rc;
 }
 
-int sa_mqtt_connect(MQTTAsync *client, struct pubsub_opts *opts) {
+int mqtt_connect(MQTTAsync *client, struct pubsub_opts *opts) {
   MQTTAsync_connectOptions conn_opts = MQTTAsync_connectOptions_initializer;
   MQTTAsync_SSLOptions ssl_opts = MQTTAsync_SSLOptions_initializer;
   MQTTAsync_willOptions will_opts = MQTTAsync_willOptions_initializer;
@@ -380,7 +380,7 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
     return a_printerror(env, -1, MQTTAsync_strerror(rc), opts_record);
   }
 
-  rc = sa_mqtt_connect(client, &opts);
+  rc = mqtt_connect(client, &opts);
   if (rc != MQTTASYNC_SUCCESS) {
     MQTTAsync_destroy(client);
     free(context);
