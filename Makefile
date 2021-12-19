@@ -21,20 +21,25 @@ CFLAGS = -O2 -Wall -Werror -DUNIX=1 -DLINUX=1 -DNO_HEAP_TRACKING=1 -DHIGH_PERFOR
 
 LIBDIR = $(SA_ENGINE_HOME)/bin
 
-INCLUDES = -I$(SA_ENGINE_HOME)/C -Iinclude
+INCLUDES = -I$(SA_ENGINE_HOME)/C -Iinclude -Ipaho.mqtt.c/src
 PAHO_LIB=:libpaho-mqtt3as.so
 
-/usr/local/lib/libpaho-mqtt3as.so:
-	@echo "##############################################################"
-	@echo "Will install paho.mqtt.c you might be asked for admin password."
-	@echo "##############################################################"
-	git submodule init
-	git submodule update
-	cd paho.mqtt.c && make && sudo make install
-							  
-all: $(SOURCE_FILES) /usr/local/lib/libpaho-mqtt3as.so
+
+all: $(SOURCE_FILES) $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so
 	$(CC) $(CFLAGS) $(LFLAGS) -o $(EXTENSION).so $(SOURCE_FILES) -L$(LIBDIR) -lsa.kernel -l$(PAHO_LIB) 
 	cp $(EXTENSION).so $(SA_ENGINE_HOME)/bin/
+
+	
+$(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so:
+	-@rm /home/johan/sa.engine/bin/libpaho-mqtt3as.so*
+	git submodule init
+	git submodule update
+	cd paho.mqtt.c && make
+	cp paho.mqtt.c/build/output/libpaho-mqtt3as.so.1.3 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so.1.3
+	cd $(SA_ENGINE_HOME)/bin/ && ln -s libpaho-mqtt3as.so.1.3 libpaho-mqtt3as.so.1
+	cd $(SA_ENGINE_HOME)/bin/ && ln -s libpaho-mqtt3as.so.1 libpaho-mqtt3as.so
+							  
+
 
 clean:
 	rm -f *.so
