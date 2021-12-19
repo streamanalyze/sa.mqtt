@@ -24,8 +24,15 @@ LIBDIR = $(SA_ENGINE_HOME)/bin
 INCLUDES = -I$(SA_ENGINE_HOME)/C -Iinclude
 PAHO_LIB=:libpaho-mqtt3as.so
 
+/usr/local/lib/libpaho-mqtt3as.so:
+	@echo "##############################################################"
+	@echo "Will install paho.mqtt.c you might be asked for admin password."
+	@echo "##############################################################"
+	git submodule init
+	git submodule update
+	cd paho.mqtt.c && make && sudo make install
 							  
-all: $(SOURCE_FILES)
+all: $(SOURCE_FILES) /usr/local/lib/libpaho-mqtt3as.so
 	$(CC) $(CFLAGS) $(LFLAGS) -o $(EXTENSION).so $(SOURCE_FILES) -L$(LIBDIR) -lsa.kernel -l$(PAHO_LIB) 
 	cp $(EXTENSION).so $(SA_ENGINE_HOME)/bin/
 
