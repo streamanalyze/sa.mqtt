@@ -58,3 +58,7 @@ dkms.conf
 *~
 
 build
+
+*.tgz
+*.tar.gz
+*.gz

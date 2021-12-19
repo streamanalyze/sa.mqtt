@@ -38,3 +38,14 @@ test: all
 	mosquitto -d > /dev/null
 	sa.engine -O test/test.osql
 	pkill -9 mosquitto
+
+
+build_docker: Dockerfile
+	docker build . -t sa.mqtt.builder:1
+
+win_run_docker:
+	docker run -ti --mount type=bind,source="%cd%",target=/sa.mqtt  sa.mqtt.builder:1 /bin/bash
+
+linux_run_docker:
+	docker run -ti --mount type=bind,source="$(pwd)",target=/sa.mqtt  sa.mqtt.builder:1 /bin/bash
+

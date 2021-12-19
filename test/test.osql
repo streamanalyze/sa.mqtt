@@ -2,6 +2,7 @@ load_osql("mqtt.osql");
 // Get a C-backtrace on segfault, nice to have trace if 
 // a crash occurs
 _lisp("(sig-bt)");
+
 set :mqtt_connect_opts = {
   "qos": 0,
   "connection": "tcp://localhost:1883",
@@ -68,27 +69,28 @@ validate "MQTT Modify and relay"
           limit 10 => bag(12,13,14,10,11);
 
 /* Do some basic benchmarks */
+sleep(1);
 validate "MQTT Fast"
   check print("\n") => true
-  check sink(publish(siota(1,10),"mqtt:/g1")) => true
+  check sink(publish(diota(0.1,1,4),"mqtt:/g1")) => true
   check print("\tQoS0 " 
          + (1000/abs(now() - ts(last(select x 
                                        from Object x 
                                       where x in subscribe("mqtt:/max1") 
-                                      limit 1000))))+" (max ~1000)") => true
-  check sink(publish(siota(1,10),"mqtt:/g2")) => true
+                                      limit 1000))))+" (~1000/time)") => true
+  check sink(publish(diota(0.1,1,4),"mqtt:/g2")) => true
   check print("\tQoS1 " 
          + (1000/abs(now() - ts(last(select x 
                                        from Object x 
                                       where x in subscribe("mqtt1:/max2") 
-                                      limit 1000))))+" (max ~1000)") => true
-  check sink(publish(siota(1,10),"mqtt:/g4")) => true
+                                      limit 1000))))+" (~1000/time)") => true
+  check sink(publish(diota(0.1,1,4),"mqtt:/g4")) => true
   check print("\tQoS2 " 
          + (1000/abs(now() - ts(last(select x 
                                        from Object x 
                                       where x in subscribe("mqtt2:/max3") 
-                                      limit 1000))))+" (max ~1000)") => true
-  check sink(publish(siota(1,10),"mqtt:/g6")) => true;
+                                      limit 1000))))+" (~1000/time)") => true
+  check sink(publish(diota(0.1,1,10),"mqtt:/g6")) => true;
 
 validate "MQTT create item not leaking objects"
   check aton(_lisp("(allocated-objects 'binary)")) < 30 => true;
