@@ -46,6 +46,12 @@ test: all
 	sa.engine -O test/test.osql
 	pkill -9 mosquitto
 
+bench:
+	-pkill -9 mosquitto ; pkill -9 sa.engine
+	cp $(EXTENSION).so $(SA_ENGINE_HOME)/bin/
+	mosquitto -d > /dev/null
+	sa.engine -O test/benchmark.osql
+	pkill -9 mosquitto
 
 build_docker: Dockerfile
 	docker build . -t sa.mqtt.builder:1
