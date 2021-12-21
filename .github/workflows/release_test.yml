@@ -23,4 +23,4 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag mqtt-tester:0.0
     - name: Test
-      run: docker run -ti --mount type=bind,source="$(pwd)",target=/sa.mqtt  sa.mqtt.builder:1 /bin/bash -c "cd sa.mqtt && make test"
+      run: docker run -ti --mount type=bind,source="$(pwd)",target=/sa.mqtt  mqtt-tester:0.0 /bin/bash -c "cd sa.mqtt && make test"
