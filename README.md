@@ -1,5 +1,6 @@
 # sa.mqtt
 MQTT extender for sa.engine
+[![sa.mqtt Tests](https://github.com/streamanalyze/sa.mqtt/actions/workflows/release_test.yml/badge.svg)](https://github.com/streamanalyze/sa.mqtt/actions/workflows/release_test.yml)
 
 This project implements publish and subscribe using
 [eclipse/paho.mqtt.c](https://github.com/eclipse/paho.mqtt.c).  Install the
