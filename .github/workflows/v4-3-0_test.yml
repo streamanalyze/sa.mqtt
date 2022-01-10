@@ -1,0 +1,26 @@
+name: v4.3.0 Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Configure AWS credentials from SA account
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-north-1
+    - name: Download sa.engine release
+      run: |
+        aws s3 cp s3://release.streamanalyze.com/v4.3.0/linux/sa_engine_core_linux_x64.tar.gz .
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag mqtt-tester:0.0
+    - name: Test
+      run: docker run --mount type=bind,source="$(pwd)",target=/sa.mqtt  mqtt-tester:0.0 /bin/bash -c "cd sa.mqtt && make test"
