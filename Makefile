@@ -31,7 +31,7 @@ all: $(SOURCE_FILES) $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so
 
 	
 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so:
-	-@rm /home/johan/sa.engine/bin/libpaho-mqtt3as.so*
+	-@rm $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so*
 	git submodule init
 	git submodule update
 	cd paho.mqtt.c && make
