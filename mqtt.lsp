@@ -6,6 +6,6 @@
 with NAME and OPTS"
   (register-ext-pubsub name opts 
      'mqtt-register-client nil 
-     'mqtt-subscribe 'mqtt-unsubscribe 
-     'mqtt-publish)
+     'mqtt-publish
+     'mqtt-subscribe 'mqtt-unsubscribe )
   (osql-result name opts name))

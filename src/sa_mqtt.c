@@ -210,10 +210,10 @@ void onSendFailure(void *context, MQTTAsync_failureData *response) {
   }
 }
 
-void free_mqtt_client(void *mem, size_t cxt) {
-  sa_mqtt_instance *context = (sa_mqtt_instance *)mem;
+void free_mqtt_client(sa_datapump *pump) {
+  sa_mqtt_instance *context = (sa_mqtt_instance *)pump->context;
   MQTTAsync *client = context->client;
-  sa_datapump_destroy(context->pump);
+  sa_datapump_destroy(pump);
   MQTTAsync_destroy(client);
   free(context);
 }
@@ -223,13 +223,14 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
 
   char *dtopic;
   int rc, i;
+  sa_datapump *pump;
   ohandle str = nil;
   MQTTAsync_responseOptions pub_opts = MQTTAsync_responseOptions_initializer;
   MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
   if (a_datatype(instance) != memorytype)
     return lerror(ILLEGAL_ARGUMENT, instance, env);
-  sa_mqtt_instance *context = dr(instance, memorycell)->data;
-
+  pump = dr(instance, memorycell)->data;
+  sa_mqtt_instance *context = pump->context;
   IntoString(topic, dtopic, env);
   if (a_datatype(value) == LISTTYPE) {
     if (a_length(value) == 1) {
@@ -275,12 +276,14 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
 
 ohandle mqtt_subscribefn(bindtype env, ohandle instance, ohandle topic) {
 
+  sa_datapump *pump;
   sa_mqtt_instance *context;
   char *dtopic;
   int rc, i = 0;
   if (a_datatype(instance) != memorytype)
     return lerror(ILLEGAL_ARGUMENT, instance, env);
-  context = dr(instance, memorycell)->data;
+  pump = dr(instance, memorycell)->data;
+  context = pump->context;
   IntoString(topic, dtopic, env);
 
   MQTTAsync_responseOptions ropts = MQTTAsync_responseOptions_initializer;
@@ -302,11 +305,13 @@ ohandle mqtt_subscribefn(bindtype env, ohandle instance, ohandle topic) {
 ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
 
   char *dtopic;
+  sa_datapump *pump;
   sa_mqtt_instance *context;
   MQTTAsync_responseOptions ropts = MQTTAsync_responseOptions_initializer;
   if (a_datatype(instance) != memorytype)
     return lerror(ILLEGAL_ARGUMENT, instance, env);
-  context = dr(instance, memorycell)->data;
+  pump = dr(instance, memorycell)->data;
+  context = pump->context;
   IntoString(topic, dtopic, env);
   ropts.onSuccess = onUnSubscribe;
   ropts.onFailure = onUnSubscribeFailure;
@@ -320,13 +325,13 @@ ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
   return t;
 }
 
-void make_mqtt_binary(ohandle *ret, void *p,void *data) {
+void make_mqtt_binary(ohandle *ret, sa_datapump *p,void *data) {
   sa_mqtt_buff_item *item = (sa_mqtt_buff_item *)data;
   sa_makebinary(ret, item->message->payload, item->message->payloadlen);
   MQTTAsync_freeMessage(&(item->message));
 }
 
-size_t get_topic_name(void *p, void *data, char *const topic_name,
+size_t get_topic_name(sa_datapump *p, void *data, char *const topic_name,
                       size_t topic_name_len) {
   sa_mqtt_buff_item *item = (sa_mqtt_buff_item *)data;
 
@@ -386,11 +391,16 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
     free(context);
     return a_printerror(env, -1, MQTTAsync_strerror(rc), opts_record);
   }
-  sa_datapump *pump = sa_start_datapump(make_mqtt_binary, get_topic_name, NULL,
-                                        dname,NULL, SA_MQTT_CIRC_BUFF_SIZE,
-                                        sizeof(sa_mqtt_buff_item), context);
+  sa_datapump *pump = sa_datapump_create();
+  pump->create_item_fn = make_mqtt_binary;
+  pump->get_flow_name_fn = get_topic_name;
+  pump->free_pump_fn = free_mqtt_client;
+  pump->pump_name = dname;
+  pump->buffer_size = SA_MQTT_CIRC_BUFF_SIZE;
+  pump->item_size = sizeof(sa_mqtt_buff_item);
+  pump->context = context;
   context->pump = pump;
-  return map_memory(context, sizeof(context), (size_t)0, free_mqtt_client);
+  return sa_datapump_init(pump);
 }
 
 EXPORT void a_initialize_extension(void *xa) {
