@@ -264,7 +264,7 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
       a_sleep(0.1 * i * i);
       continue;
     }
-    a_printerror(env, -1, MQTTAsync_strerror(rc), instance);
+    sa_raise_errormsg(MQTTAsync_strerror(rc), instance);
     break;
   }
   if (a_datatype(value) == BINARYTYPE)
@@ -297,7 +297,7 @@ ohandle mqtt_subscribefn(bindtype env, ohandle instance, ohandle topic) {
     a_sleep(0.1 * i * i);
   }
   if (i == 10) {
-    a_printerror(env, -1, MQTTAsync_strerror(rc), topic);
+    sa_raise_errormsg(MQTTAsync_strerror(rc), topic);
     return nil;
   }
   return t;
@@ -319,7 +319,7 @@ ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
   int rc;
   if ((rc = MQTTAsync_unsubscribe(*(context->client), dtopic, &ropts)) !=
       MQTTASYNC_SUCCESS) {
-    a_printerror(env, -1, MQTTAsync_strerror(rc), topic);
+    sa_raise_errormsg(MQTTAsync_strerror(rc), topic);
     return nil;
   }
   return t;
@@ -353,7 +353,7 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
     IntoString(name, dname, env);
 
   if (stringlen(name) > 20) {
-    return a_printerror(env, -1, "Broker id cannot be more than 20 chars.",
+    return sa_raise_errormsg("Broker id cannot be more than 20 chars.",
                         opts_record);
   } else {
     memset(context->name, 0, 20);
@@ -375,21 +375,21 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
     if (client != NULL)
       free(client);
     free(context);
-    return a_printerror(env, -1, MQTTAsync_strerror(rc), opts_record);
+    return sa_raise_errormsg(MQTTAsync_strerror(rc), opts_record);
   }
 
   rc = MQTTAsync_setCallbacks(*client, context, NULL, messageArrived, NULL);
   if (rc != MQTTASYNC_SUCCESS) {
     MQTTAsync_destroy(client);
     free(context);
-    return a_printerror(env, -1, MQTTAsync_strerror(rc), opts_record);
+    return sa_raise_errormsg(MQTTAsync_strerror(rc), opts_record);
   }
 
   rc = mqtt_connect(client, &opts);
   if (rc != MQTTASYNC_SUCCESS) {
     MQTTAsync_destroy(client);
     free(context);
-    return a_printerror(env, -1, MQTTAsync_strerror(rc), opts_record);
+    return sa_raise_errormsg(MQTTAsync_strerror(rc), opts_record);
   }
   sa_datapump *pump = sa_datapump_create();
   pump->create_item_fn = make_mqtt_binary;
