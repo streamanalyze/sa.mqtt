@@ -15,7 +15,7 @@ SOURCE_FILES = $(wildcard $(srcdir)/*.c)
 XFLAGS = -fPIC
 LFLAGS = -shared
 
-CC = cc
+CC ?= cc
 
 CFLAGS = -O2 -Wall -Werror -DUNIX=1 -DLINUX=1 -DNO_HEAP_TRACKING=1 -DHIGH_PERFORMANCE=1 $(CARCH) $(XFLAGS) $(INCLUDES)
 
