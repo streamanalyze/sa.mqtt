@@ -280,7 +280,7 @@ ohandle mqtt_subscribefn(bindtype env, ohandle instance, ohandle topic) {
   sa_mqtt_instance *context;
   char *dtopic;
   int rc, i = 0;
-  if (a_datatype(instance) != MEMORYTYPE)
+  if (a_datatype(instance) != memorytype)
     return lerror(ILLEGAL_ARGUMENT, instance, env);
   pump = dr(instance, memorycell)->data;
   context = pump->context;
