@@ -227,7 +227,7 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
   ohandle str = nil;
   MQTTAsync_responseOptions pub_opts = MQTTAsync_responseOptions_initializer;
   MQTTAsync_message pubmsg = MQTTAsync_message_initializer;
-  if (a_datatype(instance) != MEMORYTYPE)
+  if (a_datatype(instance) != memorytype)
     return lerror(ILLEGAL_ARGUMENT, instance, env);
   pump = dr(instance, memorycell)->data;
   sa_mqtt_instance *context = pump->context;
@@ -240,7 +240,7 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
   if (a_datatype(value) == STRINGTYPE) {
     IntoString(value, pubmsg.payload, env);
     pubmsg.payloadlen = strlen(pubmsg.payload);
-  } else if (a_datatype(value) == MEMORYTYPE) {
+  } else if (a_datatype(value) == memorytype) {
     pubmsg.payload = dr(value, memorycell)->data;
     pubmsg.payloadlen = dr(value, memorycell)->size;
   } else if (a_datatype(value) == BINARYTYPE) {
@@ -308,7 +308,7 @@ ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
   sa_datapump *pump;
   sa_mqtt_instance *context;
   MQTTAsync_responseOptions ropts = MQTTAsync_responseOptions_initializer;
-  if (a_datatype(instance) != MEMORYTYPE)
+  if (a_datatype(instance) != memorytype)
     return lerror(ILLEGAL_ARGUMENT, instance, env);
   pump = dr(instance, memorycell)->data;
   context = pump->context;
