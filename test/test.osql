@@ -67,8 +67,4 @@ validate "MQTT Modify and relay"
               where b in subscribe("mqtt:/modified"))))) 
           limit 10 => bag(12,13,14,10,11);
 
-
-validate "MQTT create item not leaking objects"
-  check aton(_lisp("(allocated-objects 'binary)")) < 30 => true;
-
 quit;
