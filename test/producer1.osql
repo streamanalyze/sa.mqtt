@@ -31,15 +31,15 @@ create function timeout(Number s) -> Stream
 
 wait("mqtt:/g1");
 sleep(1);
-sink(first_n(merge_streams(bag(
+sink(first_n(_merge_streams(bag(
   wait("mqtt:/g2"),
   streamof(sink(first_n(publish(siota(1,100000000000),"mqtt:/max1"),10000) ))
 )),1));
-sink(first_n(merge_streams(bag(
+sink(first_n(_merge_streams(bag(
   wait("mqtt1:/g4"),
   streamof(sink(first_n(publish(siota(1,100000000000),"mqtt1:/max2"),10000) ))
 )),1));
-sink(first_n(merge_streams(bag(
+sink(first_n(_merge_streams(bag(
   wait("mqtt1:/g6"),
   streamof(sink(first_n(publish(siota(1,100000000000),"mqtt2:/max3"),10000) ))
 )),1));

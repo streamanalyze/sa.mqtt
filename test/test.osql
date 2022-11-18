@@ -55,7 +55,7 @@ right values are emitted. */
 validate "MQTT Modify and relay"
    check select distinct x
            from number x
-          where x in extract(merge_streams(bag(
+          where x in extract(_merge_streams(bag(
             (streamof(sink(publish(binary(integer(mod(diota(0.01,1,10000),5))), 
                                     "mqtt:/pub")))),
             (streamof(sink(publish((select stream of integer(b)+10
@@ -66,9 +66,5 @@ validate "MQTT Modify and relay"
                from Binary b
               where b in subscribe("mqtt:/modified"))))) 
           limit 10 => bag(12,13,14,10,11);
-
-
-validate "MQTT create item not leaking objects"
-  check aton(_lisp("(allocated-objects 'binary)")) < 30 => true;
 
 quit;
