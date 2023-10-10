@@ -26,7 +26,7 @@ PAHO_LIB=:libpaho-mqtt3as.so
 
 
 all: $(SOURCE_FILES) $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so
-	$(CC) $(CFLAGS) $(LFLAGS) -o $(EXTENSION).so $(SOURCE_FILES) -L$(LIBDIR) -lsa.kernel -l$(PAHO_LIB) 
+	$(CC) $(CFLAGS) $(LFLAGS) -o $(EXTENSION).so $(SOURCE_FILES) -L$(LIBDIR)  -l$(PAHO_LIB) 
 	cp $(EXTENSION).so $(SA_ENGINE_HOME)/bin/
 
 	
