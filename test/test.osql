@@ -48,15 +48,6 @@ validate "MQTT Subscribes (and publish)"
                       where b in subscribe(topic)
                       limit 10))))) => 30;
 
-create function _merge_streams(Bag of Stream b) -> Stream
-  /* **DEPRECIATED** Use merge(Vector of Stream vs) instream */
-  as merge(vectorof(b));
-
-set_resulttypes(#'vector-stream.merge->stream',
-                'transparent-collection-resulttypes');
-set_resulttypes(#'bag-stream._merge_streams->stream',
-                'transparent-collection-resulttypes');
-
 /* Hold on, now we are publishing to mqtt client /pub then we subscribe
 to mqtt1 /pub and add 10 to the number, publish the new number to 
 mqtt1 /modified. Finally we subscribe to mqtt1 /modified and make sure the 
