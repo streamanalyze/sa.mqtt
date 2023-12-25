@@ -17,6 +17,12 @@ set :mqtt_connect_opts2 = {
   "clientid": "producer1-qos2"
 };
 
+create function _merge_streams(Bag of Stream b) -> Stream
+  /* QaD Use merge(Vector of Stream vs) instead */
+  as merge(vectorof(b));
+set_resulttypes(#'bag-stream._merge_streams->stream',
+                'transparent-collection-resulttypes');
+
 mqtt:register_client("mqtt",:mqtt_connect_opts);
 mqtt:register_client("mqtt1",:mqtt_connect_opts1);
 mqtt:register_client("mqtt2",:mqtt_connect_opts2);
@@ -28,6 +34,7 @@ create function wait(charstring topic) -> Stream
   };
 create function timeout(Number s) -> Stream
   as select stream of sleep(s);
+
 
 wait("mqtt:/g1");
 sleep(1);
