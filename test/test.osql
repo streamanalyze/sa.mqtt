@@ -20,7 +20,6 @@ set :mqtt_connect_opts2 = {
   "clientid": "client3"
 };
 
-
 mqtt:register_client("mqtt",:mqtt_connect_opts);
 
 mqtt:register_client("mqtt1",:mqtt_connect_opts1);
