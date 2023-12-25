@@ -29,6 +29,12 @@ create function wait(charstring topic) -> Stream
 create function timeout(Number s) -> Stream
   as select stream of sleep(s);
 
+create function _merge_streams(Bag of Stream b) -> Stream
+  /* QaD Use merge(Vector of Stream vs) instream */
+  as merge(vectorof(b));
+set_resulttypes(#'bag-stream._merge_streams->stream',
+                'transparent-collection-resulttypes');
+
 wait("mqtt:/g1");
 sleep(1);
 sink(first_n(_merge_streams(bag(

@@ -1,4 +1,4 @@
-load_osql("mqtt.osql");
+        load_osql("mqtt.osql");
 // Get a C-backtrace on segfault, nice to have trace if 
 // a crash occurs
 _lisp("(sig-bt)");
@@ -47,6 +47,12 @@ validate "MQTT Subscribes (and publish)"
                        from binary b
                       where b in subscribe(topic)
                       limit 10))))) => 30;
+
+create function _merge_streams(Bag of Stream b) -> Stream
+  /* QaD Use merge(Vector of Stream vs) instream */
+  as merge(vectorof(b));
+set_resulttypes(#'bag-stream._merge_streams->stream',
+                'transparent-collection-resulttypes');
 
 /* Hold on, now we are publishing to mqtt client /pub then we subscribe
 to mqtt1 /pub and add 10 to the number, publish the new number to 
