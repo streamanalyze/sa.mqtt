@@ -300,7 +300,7 @@ ohandle mqtt_subscribefn(bindtype env, ohandle instance, ohandle topic) {
     sa_raise_errormsg(MQTTAsync_strerror(rc), topic);
     return nil;
   }
-  return t;
+  return tsymbol;
 }
 ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
 
@@ -322,7 +322,7 @@ ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
     sa_raise_errormsg(MQTTAsync_strerror(rc), topic);
     return nil;
   }
-  return t;
+  return tsymbol;
 }
 
 void make_mqtt_binary(ohandle *ret, sa_datapump *p,void *data) {
