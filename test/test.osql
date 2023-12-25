@@ -1,4 +1,4 @@
-        load_osql("mqtt.osql");
+load_osql("mqtt.osql");
 // Get a C-backtrace on segfault, nice to have trace if 
 // a crash occurs
 _lisp("(sig-bt)");
@@ -49,7 +49,7 @@ validate "MQTT Subscribes (and publish)"
                       limit 10))))) => 30;
 
 create function _merge_streams(Bag of Stream b) -> Stream
-  /* QaD Use merge(Vector of Stream vs) instead */
+  /* QaD Use merge(Vector of Stream vs) instead! */
   as merge(vectorof(b));
 set_resulttypes(#'bag-stream._merge_streams->stream',
                 'transparent-collection-resulttypes');

@@ -30,7 +30,7 @@ create function timeout(Number s) -> Stream
   as select stream of sleep(s);
 
 create function _merge_streams(Bag of Stream b) -> Stream
-  /* QaD Use merge(Vector of Stream vs) instream */
+  /* QaD Use merge(Vector of Stream vs) instead! */
   as merge(vectorof(b));
 set_resulttypes(#'bag-stream._merge_streams->stream',
                 'transparent-collection-resulttypes');
