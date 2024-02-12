@@ -242,7 +242,7 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
     pubmsg.payloadlen = strlen(pubmsg.payload);
   } else if (a_datatype(value) == MEMORYTYPE) {
     pubmsg.payload = dr(value, memorycell)->data;
-    pubmsg.payloadlen = dr(value, memorycell)->size;
+    pubmsg.payloadlen = memory_size(value;
   } else if (a_datatype(value) == BINARYTYPE) {
     size_t size = sa_size(value);
     size_t binsize;
