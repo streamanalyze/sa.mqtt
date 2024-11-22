@@ -38,11 +38,11 @@ $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so:
 	cp paho.mqtt.c/build/output/libpaho-mqtt3as.so.1.3 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so.1.3
 	cd $(SA_ENGINE_HOME)/bin/ && ln -s libpaho-mqtt3as.so.1.3 libpaho-mqtt3as.so.1
 	cd $(SA_ENGINE_HOME)/bin/ && ln -s libpaho-mqtt3as.so.1 libpaho-mqtt3as.so
-							  
-
-
+ 
 clean:
-	rm -f *.so
+	-rm -f *.so
+	-cd $(SA_ENGINE_HOME)/bin/ && rm -f libpaho-mqtt3as.so* libsa_mqtt.so
+	-cd $(SA_ENGINE_HOME)/sa.engine/bin/ && rm -f libpaho-mqtt3as.so* libsa_mqtt.so
 
 test: all
 	-pkill -9 mosquitto ; pkill -9 sa.engine
