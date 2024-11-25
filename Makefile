@@ -35,9 +35,9 @@ $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so:
 	git submodule init
 	git submodule update
 	cd paho.mqtt.c && make
-	cp paho.mqtt.c/build/output/libpaho-mqtt3as.so.1.3 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so.1.3
-	cd $(SA_ENGINE_HOME)/bin/ && ln -s libpaho-mqtt3as.so.1.3 libpaho-mqtt3as.so.1
-	cd $(SA_ENGINE_HOME)/bin/ && ln -s libpaho-mqtt3as.so.1 libpaho-mqtt3as.so
+	cp -f paho.mqtt.c/build/output/libpaho-mqtt3as.so.1.3 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so.1.3
+	cd $(SA_ENGINE_HOME)/bin/ && ln -sf libpaho-mqtt3as.so.1.3 libpaho-mqtt3as.so.1
+	cd $(SA_ENGINE_HOME)/bin/ && ln -sf libpaho-mqtt3as.so.1 libpaho-mqtt3as.so
  
 clean:
 	-rm -f *.so

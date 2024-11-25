@@ -53,7 +53,7 @@ dkms.conf
 
 
 .vscode
-
+.idea/
 # Emacs files
 *~
 
