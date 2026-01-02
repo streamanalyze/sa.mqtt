@@ -242,7 +242,7 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
     pubmsg.payloadlen = strlen(pubmsg.payload);
   } else if (a_datatype(value) == MEMORYTYPE) {
     pubmsg.payload = dr(value, memorycell)->data;
-    pubmsg.payloadlen = dr(value, memorycell)->size;
+    pubmsg.payloadlen = dr(value, memorycell)->size_lo;
   } else if (a_datatype(value) == BINARYTYPE) {
     size_t size = sa_size(value);
     size_t binsize;
@@ -300,7 +300,7 @@ ohandle mqtt_subscribefn(bindtype env, ohandle instance, ohandle topic) {
     sa_raise_errormsg(MQTTAsync_strerror(rc), topic);
     return nil;
   }
-  return symbolp;
+  return tsymbol;
 }
 ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
 
@@ -322,7 +322,7 @@ ohandle mqtt_unsubscribefn(bindtype env, ohandle instance, ohandle topic) {
     sa_raise_errormsg(MQTTAsync_strerror(rc), topic);
     return nil;
   }
-  return symbolp;
+  return tsymbol;
 }
 
 void make_mqtt_binary(ohandle *ret, sa_datapump *p,void *data) {
