@@ -4,8 +4,8 @@ FROM ubuntu:24.04
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
-RUN apt-get -qy install build-essential git mosquitto cmake automake autoconf ninja-build python-jinja2 libssl-dev
+RUN apt-get -qy install build-essential git mosquitto cmake automake autoconf ninja-build python3-jinja2 libssl-dev
 
 ADD sa_engine_core_linux_x64.tar.gz /
-ENV SA_ENGINE_HOME /sa.engine
-ENV PATH $PATH:/sa.engine/bin
+ENV SA_ENGINE_HOME=/sa.engine
+ENV PATH=$PATH:/sa.engine/bin
