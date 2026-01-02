@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:24.04
 
 # apt should not expect interactive shell when setting up the docker image
 ARG DEBIAN_FRONTEND=noninteractive
