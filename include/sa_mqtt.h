@@ -98,6 +98,8 @@ struct pubsub_opts {
    {NULL, NULL}, /* MQTT V5 options */                                         \
    NULL,                                                                       \
    NULL,                                                                       \
+    100,                                                                       \
+    100,                                                                      \
    NULL};
 #endif
 
