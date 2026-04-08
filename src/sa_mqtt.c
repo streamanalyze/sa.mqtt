@@ -72,6 +72,10 @@ int getopts(bindtype env, ohandle rec, struct pubsub_opts *opts) {
                      "user-property-value");
     maybe_set_int(env, opts->message_expiry, rec, "message-expiry");
   }
+  opts->maxBufferedMessages = 100;
+  opts->sendWhileDisconnected = 100;
+  maybe_set_int(env, opts->maxBufferedMessages, rec, "maxBufferedMessages");
+  maybe_set_int(env, opts->sendWhileDisconnected, rec, "sendWhileDisconnected");
   return 0;
 }
 
@@ -251,7 +255,7 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
     pubmsg.payloadlen = size;
   } else {
     sa_json_stringify(&str, value);
-    IntoStringRef(str, pubmsg.payload, env);
+    pubmsg.payload = strdup(getstring(str));
     pubmsg.payloadlen = sa_size(str);
   }
 
@@ -264,10 +268,14 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
       a_sleep(0.1 * i * i);
       continue;
     }
+    if (a_datatype(value) != MEMORYTYPE)
+      free(pubmsg.payload);
+    if (str != nil)
+      a_free(str);
     sa_raise_errormsg(MQTTAsync_strerror(rc), instance);
-    break;
+    return nil;
   }
-  if (a_datatype(value) == BINARYTYPE)
+  if (a_datatype(value) != MEMORYTYPE)
     free(pubmsg.payload);
   if (str != nil)
     a_free(str);
@@ -364,7 +372,8 @@ ohandle mqtt_register_clientfn(bindtype env, ohandle name,
   opts.context = context;
   getopts(env, opts_record, &opts);
   context->qos = opts.qos;
-  createOpts.sendWhileDisconnected = 1;
+  createOpts.sendWhileDisconnected = opts.sendWhileDisconnected;
+  createOpts.maxBufferedMessages = opts.maxBufferedMessages;
   if (opts.MQTTVersion >= MQTTVERSION_5) {
     createOpts.MQTTVersion = MQTTVERSION_5;
   }

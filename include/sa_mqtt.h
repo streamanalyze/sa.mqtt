@@ -54,6 +54,8 @@ struct pubsub_opts {
   /* websocket HTTP proxies */
   char *http_proxy;
   char *https_proxy;
+  int maxBufferedMessages;
+  int sendWhileDisconnected;
   void *context;
 };
 #define Pubsub_opts_initializer                                                \

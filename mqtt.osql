@@ -35,5 +35,8 @@ The options record can container:
                          (default is unset)
     * `message-expiry` - MQTT 5 only.  Sets the message expiry property in 
                          seconds.
-*/
+    * `maxBufferedMessages` - The maximum number of messages that can be buffered
+                         while the client is disconnected. Default is 100.
+    * `sendWhileDisconnected` - Number of messages to buffer while not connected,
+                                default is 100.*/
   as foreign "register-mqtt-client--+";
