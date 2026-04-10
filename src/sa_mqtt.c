@@ -256,7 +256,7 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
   } else {
     sa_json_stringify(&str, value);
     pubmsg.payload = strdup(getstring(str));
-    pubmsg.payloadlen = sa_size(str);
+    pubmsg.payloadlen = strlen(str);
   }
 
   pubmsg.qos = context->qos;
