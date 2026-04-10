@@ -242,7 +242,7 @@ ohandle mqtt_publishfn(bindtype env, ohandle instance, ohandle topic,
     }
   }
   if (a_datatype(value) == STRINGTYPE) {
-    IntoString(value, pubmsg.payload, env);
+    pubmsg.payload = strdup(getstring(value));
     pubmsg.payloadlen = strlen(pubmsg.payload);
   } else if (a_datatype(value) == MEMORYTYPE) {
     pubmsg.payload = dr(value, memorycell)->data;
