@@ -72,4 +72,41 @@ validate "MQTT Modify and relay"
               where b in subscribe("mqtt:/modified"))))) 
           limit 10 => bag(12,13,14,10,11);
 
+validate "String payload not crashing"
+  check first(timeout(
+    (select stream of charstring(b) from binary b where b in subscribe("mqtt1:test_payloads/raw_string"))
+    , 5)) => "Testing raw string payload";
+
+validate "Payload size: 1-element zeros array"
+  check first(timeout(
+    (select stream of dim(b) from binary b where b in subscribe("mqtt1:test_payloads/single_zeros_array"))
+    , 5)) => 3; // [0]
+
+validate "Payload size: 2-element zeros array"
+  check first(timeout(
+    (select stream of dim(b) from binary b where b in subscribe("mqtt1:test_payloads/double_zeros_array"))
+    , 5)) => 5; // [0,0]
+
+validate "Payload size: below utf8 offset table step size"
+  check first(timeout(
+    (select stream of dim(b) from binary b where b in subscribe("mqtt1:test_payloads/below_utf8_offset_table_step_size_zero_array"))
+    , 5)) => 253; // [0,...0] - 126 0s
+
+
+validate "Payload size: at utf8 offset table step size"
+  check first(timeout(
+    (select stream of dim(b) from binary b where b in subscribe("mqtt1:test_payloads/utf8_offset_table_step_size_zero_array"))
+    , 5)) => 255; // [0,...0] - 127 0s
+
+
+validate "Payload size: above utf8 offset table step size"
+  check first(timeout(
+    (select stream of dim(b) from binary b where b in subscribe("mqtt1:test_payloads/above_utf8_offset_table_step_size_zero_array"))
+    , 5)) => 257; // [0,...0] - 128 0s
+
+validate "Payload length: 10k element zeros array"
+  check first(timeout(
+    (select stream of dim(b) from binary b where b in subscribe("mqtt1:test_payloads/10k_zeros_array"))
+    , 5)) => 20001; // [0,...0] - 10k 0s
+
 quit;
