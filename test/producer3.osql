@@ -1,0 +1,25 @@
+load_osql("mqtt.osql");
+
+set :mqtt_connect_opts = {
+  "qos": 1,
+  "connection": "tcp://localhost:1883",
+  "clientid": "producer3-qos1"
+};
+
+
+mqtt:register_client("mqtt",:mqtt_connect_opts);
+
+
+sink((select pivot_streams([s1,s2,s3,s4,s5,s6,s7])
+  from Stream s1, Stream s2, Stream s3 , Stream s4, Stream s5, Stream s6, Stream s7
+ where s1 = publish(sample_stream(zeros(1), 1),"mqtt:test_payloads/single_zeros_array", { "keep-alive": true })
+   and s2 = publish(sample_stream(zeros(2), 1),"mqtt:test_payloads/double_zeros_array", { "keep-alive": true })
+   and s3 = publish(sample_stream(zeros(126), 1),"mqtt:test_payloads/below_utf8_offset_table_step_size_zero_array", { "keep-alive": true })
+   and s4 = publish(sample_stream(zeros(127), 1),"mqtt:test_payloads/utf8_offset_table_step_size_zero_array", { "keep-alive": true })
+   and s5 = publish(sample_stream(zeros(128), 1),"mqtt:test_payloads/above_utf8_offset_table_step_size_zero_array", { "keep-alive": true })
+   and s6 = publish(sample_stream(zeros(10000), 1),"mqtt:test_payloads/10k_zeros_array", { "keep-alive": true })
+   and s7 = publish(sample_stream("Testing raw string payload", 1),"mqtt:test_payloads/raw_string", { "keep-alive": true })));
+
+quit;
+
+
