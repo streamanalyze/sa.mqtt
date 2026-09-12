@@ -30,11 +30,16 @@ all: $(SOURCE_FILES) $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so
 	cp $(EXTENSION).so $(SA_ENGINE_HOME)/bin/
 
 	
+# paho's own Makefile honours CC, and links -lssl -lcrypto out of whatever the
+# compiler's library path is.  A cross build therefore needs nothing but the
+# right CC: the arm32 base CC carries --sysroot, and that sysroot holds only
+# STATIC OpenSSL archives (docker-specifications/arm32), so the library comes
+# out with no DT_NEEDED on libssl/libcrypto and runs on every board regardless
+# of which OpenSSL it ships.  CARCH goes in through CFLAGS, which paho appends.
 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so:
 	-@rm $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so*
-	git submodule init
-	git submodule update
-	cd paho.mqtt.c && make
+	test -f paho.mqtt.c/Makefile || ( git submodule init && git submodule update )
+	cd paho.mqtt.c && $(MAKE) CFLAGS="$(CARCH)"
 	cp -f paho.mqtt.c/build/output/libpaho-mqtt3as.so.1.3 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so.1.3
 	cd $(SA_ENGINE_HOME)/bin/ && ln -sf libpaho-mqtt3as.so.1.3 libpaho-mqtt3as.so.1
 	cd $(SA_ENGINE_HOME)/bin/ && ln -sf libpaho-mqtt3as.so.1 libpaho-mqtt3as.so
