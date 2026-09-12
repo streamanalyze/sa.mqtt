@@ -39,7 +39,7 @@ all: $(SOURCE_FILES) $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so
 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so:
 	-@rm $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so*
 	test -f paho.mqtt.c/Makefile || ( git submodule init && git submodule update )
-	cd paho.mqtt.c && $(MAKE) CFLAGS="$(CARCH)"
+	cd paho.mqtt.c && $(MAKE) clean && $(MAKE) CFLAGS="$(CARCH)"
 	cp -f paho.mqtt.c/build/output/libpaho-mqtt3as.so.1.3 $(SA_ENGINE_HOME)/bin/libpaho-mqtt3as.so.1.3
 	cd $(SA_ENGINE_HOME)/bin/ && ln -sf libpaho-mqtt3as.so.1.3 libpaho-mqtt3as.so.1
 	cd $(SA_ENGINE_HOME)/bin/ && ln -sf libpaho-mqtt3as.so.1 libpaho-mqtt3as.so
