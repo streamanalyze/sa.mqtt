@@ -191,8 +191,10 @@ int mqtt_connect(MQTTAsync *client, struct pubsub_opts *opts) {
     ssl_opts.enabledCipherSuites = opts->ciphers;
     ssl_opts.ssl_error_cb = onSSLError;
     ssl_opts.ssl_error_context = opts->context;
-    ssl_opts.ssl_psk_cb = onPSKAuth;
-    ssl_opts.ssl_psk_context = &opts;
+    if (opts->psk && opts->psk_identity) {
+      ssl_opts.ssl_psk_cb = onPSKAuth;
+      ssl_opts.ssl_psk_context = &opts;
+    }
     conn_opts.ssl = &ssl_opts;
   }
   rc = MQTTAsync_connect(*client, &conn_opts);
