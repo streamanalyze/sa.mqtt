@@ -5,7 +5,8 @@ create function mqtt:register_client(Charstring name, Record opts)
 The options record can container:
     * `qos` - 0,1, or 2 the quality of service for this client. Default is 0.
     * `connection`     - connection string `protocol:host:port` , overrides 
-                         host/port e.g tls://hostname:port.  Use this option
+                         host/port e.g ssl://hostname:port
+                         (TLS: ssl://, tls://, mqtts://, wss://).  Use this option
 	                     rather than host/port to connect with TLS and/or web 
                          sockets. No default.
     * `keepalive`      - MQTT keepalive timeout value. Default is %d seconds.

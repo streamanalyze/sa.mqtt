@@ -176,6 +176,8 @@ int mqtt_connect(MQTTAsync *client, struct pubsub_opts *opts) {
   }
 
   if (opts->connection && (strncmp(opts->connection, "ssl://", 6) == 0 ||
+                           strncmp(opts->connection, "tls://", 6) == 0 ||
+                           strncmp(opts->connection, "mqtts://", 8) == 0 ||
                            strncmp(opts->connection, "wss://", 6) == 0)) {
     if (opts->insecure)
       ssl_opts.verify = 0;
